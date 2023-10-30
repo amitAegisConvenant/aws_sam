@@ -7,23 +7,24 @@ Description: >
 
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 6
     MemorySize: 128
     Runtime: nodejs16.x
     Architectures:
       - x86_64
     Environment:
       Variables:
-        USER_TABLE: !Ref Table
-        REGION_NAME: !Ref Region
+        USER_TABLE: UserTable
+        END_POINT: http://localhost:8001 # Correct the endpoint URL
+        REGION_NAME: localhost  # Correct the region name
+        AWS_ACCESS_KEY_ID: aegis
+        AWS_SECRET_ACCESS_KEY: random
+
 
 Parameters:
   Table:
     Type: String
     Default: User
-  Region:
-    Type: String
-    Default: in-north-1
 
 Resources:
   createUserFunction:
@@ -33,7 +34,7 @@ Resources:
       Handler: createUser.createUser
       Policies: 
         - DynamoDBCrudPolicy:
-            TableName : !Ref UserTable
+            TableName : UserTable
       Events:
         HelloWorld:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -47,7 +48,7 @@ Resources:
       Handler: listUsers.listUsers
       Policies: 
         - DynamoDBCrudPolicy:
-            TableName : !Ref UserTable
+            TableName : UserTable
       Events:
         HelloWorld:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -58,23 +59,35 @@ Resources:
   UserTable:
     Type: AWS::DynamoDB::Table
     Properties:
+      TableName: UserTable
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: S 
       KeySchema:
         - AttributeName: id
           KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
 
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    # Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunction:
-    Description: "Hello World Lambda Function ARN"
-    # Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    # Value: !GetAtt HelloWorldFunctionRole.Arn
+  CreateUserLocalEndpoint:
+    Description: "Local endpoint URL for createUser function"
+    Value: "http://localhost:3000/createUser"
+
+  DeleteUserLocalEndpoint:
+    Description: "Local endpoint URL for deleteUser function"
+    Value: "http://localhost:3000/deleteUser"
+
+  GetUserLocalEndpoint:
+    Description: "Local endpoint URL for getUser function"
+    Value: "http://localhost:3000/getUser"
+
+  ListUserLocalEndpoint:
+    Description: "Local endpoint URL for listUser function"
+    Value: "http://localhost:3000/listUser"
+
+  UpdateUserLocalEndpoint:
+    Description: "Local endpoint URL for updateUser function"
+    Value: "http://localhost:3000/updateUser"
+
