@@ -15,7 +15,7 @@ Globals:
     Environment:
       Variables:
         USER_TABLE: UserTable
-        END_POINT: http://localhost:8001 # Correct the endpoint URL
+        END_POINT: https://8000-amitaegisconvena-awssam-my7f6ah6pdo.ws-us105.gitpod.io # Correct the endpoint URL
         REGION_NAME: localhost  # Correct the region name
         AWS_ACCESS_KEY_ID: aegis
         AWS_SECRET_ACCESS_KEY: random
