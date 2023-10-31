@@ -7,7 +7,7 @@ Description: >
 
 Globals:
   Function:
-    Timeout: 6
+    Timeout: 3
     MemorySize: 128
     Runtime: nodejs16.x
     Architectures:
@@ -15,10 +15,9 @@ Globals:
     Environment:
       Variables:
         USER_TABLE: UserTable
-        END_POINT: https://8000-amitaegisconvena-awssam-my7f6ah6pdo.ws-us105.gitpod.io # Correct the endpoint URL
-        REGION_NAME: localhost  # Correct the region name
-        AWS_ACCESS_KEY_ID: aegis
-        AWS_SECRET_ACCESS_KEY: random
+        END_POINT: https://8000-amitaegisconvena-awssam-my7f6ah6pdo.ws-us105.gitpod.io
+
+
 
 
 Parameters:
@@ -41,6 +40,7 @@ Resources:
           Properties:
             Path: /user
             Method: post
+
   listUsersFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -51,11 +51,56 @@ Resources:
             TableName : UserTable
       Events:
         HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api 
           Properties:
             Path: /users
             Method: get
   
+  deleteUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: handler/
+      Handler: deleteUser.deleteUser
+      Policies: 
+        - DynamoDBCrudPolicy:
+            TableName : UserTable
+      Events:
+        HelloWorld:
+          Type: Api 
+          Properties:
+            Path: /user/{id}
+            Method: delete
+
+  getUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: handler/
+      Handler: getUser.getUser
+      Policies: 
+        - DynamoDBCrudPolicy:
+            TableName : UserTable
+      Events:
+        HelloWorld:
+          Type: Api 
+          Properties:
+            Path: /user/{id}
+            Method: get
+
+  updateUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: handler/
+      Handler: updateUser.updateUser
+      Policies: 
+        - DynamoDBCrudPolicy:
+            TableName : UserTable
+      Events:
+        HelloWorld:
+          Type: Api 
+          Properties:
+            Path: /user/{id}
+            Method: put
+
   UserTable:
     Type: AWS::DynamoDB::Table
     Properties:

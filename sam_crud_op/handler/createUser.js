@@ -14,7 +14,6 @@ const uuid = require("uuid");
 
 
 exports.createUser = async (event, context)=>{
-    // const timeStamp = new Date().getTime();
     const data = JSON.parse(event.body);
 
     let body;
@@ -28,15 +27,15 @@ exports.createUser = async (event, context)=>{
         TableName : USER_TABLE,
         Item:{
             id: uuid.v1(),
-            userName: data.username,
+            username: data.username,
             age:data.age,
         }
     }
 
-    // console.log(typeof data, data);
 
     try{
         body = await dynamoDB.put(params).promise();
+        body = "User Created Successfully!"
     }catch(err){
         statusCode = 400;
         body = err.message;
