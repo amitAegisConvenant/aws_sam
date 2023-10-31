@@ -3,8 +3,6 @@ const AWS = require("aws-sdk")
 const USER_TABLE = process.env.USER_TABLE;
 const END_POINT = process.env.END_POINT;
 
-
-
 const dynamoDB = new AWS.DynamoDB.DocumentClient({
     endpoint: END_POINT,
 });
@@ -12,6 +10,8 @@ const dynamoDB = new AWS.DynamoDB.DocumentClient({
 exports.deleteUser = async (event, context) =>{
     let statusCode;
     let body;
+    let response;
+
     const params = {
         TableName : USER_TABLE,
         Key:{
@@ -19,19 +19,45 @@ exports.deleteUser = async (event, context) =>{
         }
     }
 
+    // checking for user is in db or not with given id
     try{
-        await dynamoDB.delete(params).promise();
-        body = `User deleted with ID : ${event.pathParameters.id}`;
+        body = await dynamoDB.get(params).promise();
         statusCode = 200;
     }catch(err){
-        console.log("Error :", err.message);
         statusCode = 400;
-        body = 'User Not Found, Please provide a valid ID!';
+        body = err.message;
+        console.log(err);
+    }finally{
+        body = JSON.stringify(body);
     }
 
 
-    return {
-        body,
-        statusCode
+    // if body of user object is not preset with given id
+    if(body.length < 3){ 
+        body = "User Not Found, Please provide a valid ID!";
+        statusCode = 400;
+        response = {
+            body, 
+            statusCode
+        }
+    }else{
+        try{
+            await dynamoDB.delete(params).promise();
+            body = `User deleted with ID : ${event.pathParameters.id}`;
+            statusCode = 200;
+        }catch(err){
+            console.log("Error :", err.message);
+            statusCode = 400;
+            body = 'User Not Found, Please provide a valid ID!';
+        }finally{
+            body = JSON.stringify(body);
+        }
+    
+        response = {
+            body,
+            statusCode
+        };
     }
+
+    return response;
 }

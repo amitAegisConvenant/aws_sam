@@ -12,6 +12,11 @@ const dynamoDB = new AWS.DynamoDB.DocumentClient({
 exports.getUser = async (event, context) =>{
     let body;
     let statusCode;
+    let response;
+
+    const headers = {
+        "Content-Type": "application/json",
+    };
 
     const params = {
         TableName : USER_TABLE,
@@ -19,6 +24,7 @@ exports.getUser = async (event, context) =>{
             "id":event.pathParameters.id,
         }
     }
+
 
     try{
         body = await dynamoDB.get(params).promise();
@@ -31,12 +37,16 @@ exports.getUser = async (event, context) =>{
         body = JSON.stringify(body);
     }
 
-    if(body.length < 1){
+    console.log(body.length, body);
+    if(body.length < 3){
         body = "User not found!";
     }
 
-    return {
+    response = {
         body,
-        statusCode
+        statusCode,
+        headers
     }
+
+    return response;
 }

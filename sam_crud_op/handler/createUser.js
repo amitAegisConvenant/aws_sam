@@ -18,6 +18,7 @@ exports.createUser = async (event, context)=>{
 
     let body;
     let statusCode = 200;
+    let response;
 
     const headers = {
         "Content-type" : "application/json",
@@ -44,11 +45,12 @@ exports.createUser = async (event, context)=>{
         body = JSON.stringify(body);
     }
 
-
-    return {
+    response = {
         statusCode,
         body,
         headers
     }
+
+    return response;
 
 }

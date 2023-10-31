@@ -118,21 +118,21 @@ Resources:
 Outputs:
   CreateUserLocalEndpoint:
     Description: "Local endpoint URL for createUser function"
-    Value: "http://localhost:3000/createUser"
+    Value: "http://localhost:3000/user"
 
   DeleteUserLocalEndpoint:
     Description: "Local endpoint URL for deleteUser function"
-    Value: "http://localhost:3000/deleteUser"
+    Value: "http://localhost:3000/user/{id}"
 
   GetUserLocalEndpoint:
     Description: "Local endpoint URL for getUser function"
-    Value: "http://localhost:3000/getUser"
+    Value: "http://localhost:3000/user/{id}"
 
   ListUserLocalEndpoint:
     Description: "Local endpoint URL for listUser function"
-    Value: "http://localhost:3000/listUser"
+    Value: "http://localhost:3000/users"
 
   UpdateUserLocalEndpoint:
     Description: "Local endpoint URL for updateUser function"
-    Value: "http://localhost:3000/updateUser"
+    Value: "http://localhost:3000/user/{id}"
 
