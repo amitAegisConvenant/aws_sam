@@ -57,7 +57,7 @@ exports.handler = async (event, context) =>{
                     body = await dynamoDB.get(params).promise();
                     let checkBody = JSON.stringify(body);
 
-                    if(checkBody.length < 3){
+                    if(!checkBody.length < 3){
                         body = "User not found, please provide valid ID!"
                     }
                 }else{
@@ -156,7 +156,6 @@ exports.handler = async (event, context) =>{
         statusCode,
         headers
       }
-      
 
       return response;
 }
