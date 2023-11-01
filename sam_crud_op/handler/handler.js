@@ -59,6 +59,7 @@ exports.handler = async (event, context) =>{
 
                     if(!checkBody.length < 3){
                         body = "User not found, please provide valid ID!"
+                        statusCode = 400;
                     }
                 }else{
                     console.error("Please check the end point and HTTP Method!");
