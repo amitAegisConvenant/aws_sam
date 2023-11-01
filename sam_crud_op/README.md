@@ -80,10 +80,30 @@ The SAM CLI reads the application template to determine the API's routes and the
 
 ```yaml
       Events:
-        HelloWorld:
+        createUser:
           Type: Api
           Properties:
-            Path: /hello
+            Path: /user
+            Method: get
+      deleteUser:
+          Type: Api
+          Properties:
+            Path: /user/{id}
+            Method: delete
+      getUser:
+          Type: Api
+          Properties:
+            Path: /user/{id}
+            Method: get
+      updateUser:
+          Type: Api
+          Properties:
+            Path: /user/{id}
+            Method: put
+      listUsers:
+          Type: Api
+          Properties:
+            Path: /users
             Method: get
 ```
 
@@ -97,7 +117,7 @@ To simplify troubleshooting, SAM CLI has a command called `sam logs`. `sam logs`
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
 ```bash
-sam_crud_op$ sam logs -n HelloWorldFunction --stack-name sam_crud_op --tail
+sam_crud_op$ sam logs -n sam_crud_op --stack-name sam_crud_op --tail
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
