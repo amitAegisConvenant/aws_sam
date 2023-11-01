@@ -18,88 +18,46 @@ Globals:
         END_POINT: https://8000-amitaegisconvena-awssam-my7f6ah6pdo.ws-us105.gitpod.io
 
 
-
-
 Parameters:
   Table:
     Type: String
     Default: User
 
 Resources:
-  createUserFunction:
+  handlerFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: handler/
-      Handler: createUser.createUser
+      Handler: handler.handler
       Policies: 
         - DynamoDBCrudPolicy:
             TableName : UserTable
       Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+        creatUser:
+          Type: Api 
           Properties:
             Path: /user
             Method: post
-
-  listUsersFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: handler/
-      Handler: listUsers.listUsers
-      Policies: 
-        - DynamoDBCrudPolicy:
-            TableName : UserTable
-      Events:
-        HelloWorld:
+        getUser:
+          Type: Api 
+          Properties:
+            Path: /user/{id}
+            Method: get
+        listUsers:
           Type: Api 
           Properties:
             Path: /users
             Method: get
-  
-  deleteUserFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: handler/
-      Handler: deleteUser.deleteUser
-      Policies: 
-        - DynamoDBCrudPolicy:
-            TableName : UserTable
-      Events:
-        HelloWorld:
-          Type: Api 
-          Properties:
-            Path: /user/{id}
-            Method: delete
-
-  getUserFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: handler/
-      Handler: getUser.getUser
-      Policies: 
-        - DynamoDBCrudPolicy:
-            TableName : UserTable
-      Events:
-        HelloWorld:
-          Type: Api 
-          Properties:
-            Path: /user/{id}
-            Method: get
-
-  updateUserFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: handler/
-      Handler: updateUser.updateUser
-      Policies: 
-        - DynamoDBCrudPolicy:
-            TableName : UserTable
-      Events:
-        HelloWorld:
+        updateUser:
           Type: Api 
           Properties:
             Path: /user/{id}
             Method: put
+        deleteUser:
+          Type: Api 
+          Properties:
+            Path: /user/{id}
+            Method: delete
 
   UserTable:
     Type: AWS::DynamoDB::Table
